@@ -10,6 +10,7 @@ namespace Decorator_With_CustomFluentBuilder
         {
             this._employee = employee;
         }
+
         public virtual void Payout()
         {
             Console.WriteLine($"EmployeeId: {_employee.EmployeeId}\nEmployee type: {base.GetType().Name}");
@@ -22,6 +23,5 @@ namespace Decorator_With_CustomFluentBuilder
         {
             _employee.Work();
         }
-
     }
 }

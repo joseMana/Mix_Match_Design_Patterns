@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decorator_With_CustomFluentBuilder", "Decorator_With_Builder\Decorator_With_CustomFluentBuilder.csproj", "{8EAD83E1-3288-4C64-82DC-A2EE09F8A783}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decorator_With_CustomFluentBuilder", "Decorator_With_CustomFluentBuilder\Decorator_With_CustomFluentBuilder.csproj", "{8EAD83E1-3288-4C64-82DC-A2EE09F8A783}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decorator_and_Adapter", "Decorator_and_Adapter\Decorator_and_Adapter.csproj", "{B22EE5F4-9E43-44A0-9D3C-5D78BD158986}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Observer_and_Strategy", "Observer_and_Strategy\Observer_and_Strategy.csproj", "{B97C87A1-FDB6-4CF3-94AB-3319373A0EA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Factory_and_Singleton", "Factory_and_Singleton\Factory_and_Singleton.csproj", "{241DADEE-DF0D-4270-889A-398FE0149A01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Factory_and_Singleton", "Factory_and_Singleton\Factory_and_Singleton.csproj", "{241DADEE-DF0D-4270-889A-398FE0149A01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediator_and_Singleton", "Mediator_and_Singleton\Mediator_and_Singleton.csproj", "{EE5ED06F-16D2-45F0-86A4-32AF1BB7A029}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mediator_and_Singleton", "Mediator_and_Singleton\Mediator_and_Singleton.csproj", "{EE5ED06F-16D2-45F0-86A4-32AF1BB7A029}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

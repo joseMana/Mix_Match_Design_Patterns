@@ -1,37 +1,100 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Decorator_With_CustomFluentBuilder
+namespace Decorator_With_Builder
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            Developer dev1 = Developer.Create();
-            dev1.FirstName = "John";
-            dev1.LastName = "Puruntong";
-            dev1.ProjectName = "Fiserv Mainframe Offload";
-            dev1.ProgrammingLanguage = "C#";
-            dev1.MastersEngagement = new List<string> { "EF Core", "C#", "Xamarin" };
-            var permanentDeveloper = dev1.DecorateAs<ContractualEmployee>(c =>
-            {
-                c.SetPayFrequency(WagePayFrequency.Daily);
-                c.SetPayRate(500);
-            });
+            Console.WriteLine("Hello World!");
+        }
+    }
 
-            QualityEngineer qe = new QualityEngineer();
-            qe.FirstName = "Billy";
-            qe.LastName = "Puruntong";
-            qe.ProjectName = "EY";
-            qe.TestingTool = "Tricentis Tosca";
-            qe.MastersEngagement = new List<string> { "Selenium Framework", "NeoLoad Automation" };
-            var contractualQe = qe.DecorateAs<PermanentEmployee>(c =>
-            {
-                c.SetPayFrequency(SalaryPayFrequency.BiMonthly);
-                c.SetSalaryValue(30000);
-            });
+    //Decorator with Builder if you need to build a complex object and you want to be able to change the object's structure during runtime.
 
-            Console.ReadLine();
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Decorator
+    {
+        class Program
+        {
+            static void Main(string[] args)
+            {
+                var car = new CarBuilder();
+                var carDecorator = new CarDecorator(car);
+                carDecorator.Build();
+                Console.WriteLine(carDecorator);
+            }
+        }
+
+        public interface ICarBuilder
+        {
+            void BuildFrame();
+            void BuildEngine();
+            void BuildWheels();
+            void BuildDoors();
+        }
+
+        public class CarBuilder : ICarBuilder
+        {
+            public void BuildFrame()
+            {
+                Console.WriteLine("Car frame is built");
+            }
+
+            public void BuildEngine()
+            {
+                Console.WriteLine("Car engine is built");
+            }
+
+            public void BuildWheels()
+            {
+                Console.WriteLine("Car wheels are built");
+            }
+
+            public void BuildDoors()
+            {
+                Console.WriteLine("Car doors are built");
+            }
+        }
+
+        public class CarDecorator : ICarBuilder
+        {
+            private ICarBuilder _carBuilder;
+            public CarDecorator(ICarBuilder carBuilder)
+            {
+                _carBuilder = carBuilder;
+            }
+
+            public void BuildFrame()
+            {
+                _carBuilder.BuildFrame();
+            }
+
+            public void BuildEngine()
+            {
+                _carBuilder.BuildEngine();
+            }
+
+            public void BuildWheels()
+            {
+                _carBuilder.BuildWheels();
+            }
+
+            public void BuildDoors()
+            {
+                _carBuilder.BuildDoors();
+            }
+
+            public override string ToString()
+            {
+                return _carBuilder.ToString();
+            }
         }
     }
 }
