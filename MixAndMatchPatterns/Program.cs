@@ -1,102 +1,100 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 
-namespace MixAndMatchPatterns.AbstractFactory_With_Singleton
+namespace RefactoringGuru.DesignPatterns.Observer.Conceptual
 {
-    public interface IAbstractFactory
+    public interface IObserver
     {
-        IAbstractProductA CreateProductA();
-
-        IAbstractProductB CreateProductB();
+        // Receive update from subject
+        void Update(ISubject subject);
     }
 
-    class ConcreteFactory1 : IAbstractFactory
+    public interface ISubject
     {
-        private IAbstractProductA _abstractProductAInstance;
-        private IAbstractProductB _abstractProductBInstance;
-        public IAbstractProductA CreateProductA() => _instance ?? (_instance = new ConcreteProductA1());
-        public IAbstractProductB CreateProductB() => _instance ?? (_instance = new ConcreteProductB1());
+        // Attach an observer to the subject.
+        void Attach(IObserver observer);
+
+        // Detach an observer from the subject.
+        void Detach(IObserver observer);
+
+        // Notify all observers about an event.
+        void Notify();
     }
 
-    class ConcreteFactory2 : IAbstractFactory
+    // The Subject owns some important state and notifies observers when the
+    // state changes.
+    public class Subject : ISubject
     {
-        private IAbstractProductA _abstractProductAInstance;
-        private IAbstractProductB _abstractProductBInstance;
-        public IAbstractProductA CreateProductA() => _instance ?? (_instance = new ConcreteProductA2());
-        public IAbstractProductB CreateProductB() => _instance ?? (_instance = new ConcreteProductB2());
-    }
+        // For the sake of simplicity, the Subject's state, essential to all
+        // subscribers, is stored in this variable.
+        public int State { get; set; } = -0;
 
-    public interface IAbstractProductA
-    {
-        string UsefulFunctionA();
-    }
+        // List of subscribers. In real life, the list of subscribers can be
+        // stored more comprehensively (categorized by event type, etc.).
+        private List<IObserver> _observers = new List<IObserver>();
 
-    class ConcreteProductA1 : IAbstractProductA
-    {
-        public string UsefulFunctionA()
+        // The subscription management methods.
+        public void Attach(IObserver observer)
         {
-            return "The result of the product A1.";
+            Console.WriteLine("Subject: Attached an observer.");
+            this._observers.Add(observer);
+        }
+
+        public void Detach(IObserver observer)
+        {
+            this._observers.Remove(observer);
+            Console.WriteLine("Subject: Detached an observer.");
+        }
+
+        // Trigger an update in each subscriber.
+        public void Notify()
+        {
+            Console.WriteLine("Subject: Notifying observers...");
+
+            foreach (var observer in _observers)
+            {
+                observer.Update(this);
+            }
+        }
+
+        // Usually, the subscription logic is only a fraction of what a Subject
+        // can really do. Subjects commonly hold some important business logic,
+        // that triggers a notification method whenever something important is
+        // about to happen (or after it).
+        public void SomeBusinessLogic()
+        {
+            Console.WriteLine("\nSubject: I'm doing something important.");
+            this.State = new Random().Next(0, 10);
+
+            Thread.Sleep(15);
+
+            Console.WriteLine("Subject: My state has just changed to: " + this.State);
+            this.Notify();
         }
     }
 
-    class ConcreteProductA2 : IAbstractProductA
+    // Concrete Observers react to the updates issued by the Subject they had
+    // been attached to.
+    class ConcreteObserverA : IObserver
     {
-        public string UsefulFunctionA()
+        public void Update(ISubject subject)
         {
-            return "The result of the product A2.";
+            if ((subject as Subject).State < 3)
+            {
+                Console.WriteLine("ConcreteObserverA: Reacted to the event.");
+            }
         }
     }
 
-    public interface IAbstractProductB
+    class ConcreteObserverB : IObserver
     {
-        string UsefulFunctionB();
-        string AnotherUsefulFunctionB(IAbstractProductA collaborator);
-    }
-
-    class ConcreteProductB1 : IAbstractProductB
-    {
-        public string UsefulFunctionB()
+        public void Update(ISubject subject)
         {
-            return "The result of the product B1.";
-        }
-        public string AnotherUsefulFunctionB(IAbstractProductA collaborator)
-        {
-            var result = collaborator.UsefulFunctionA();
-            return $"The result of the B1 collaborating with the ({result})";
-        }
-    }
-
-    class ConcreteProductB2 : IAbstractProductB
-    {
-        public string UsefulFunctionB()
-        {
-            return "The result of the product B2.";
-        }
-        public string AnotherUsefulFunctionB(IAbstractProductA collaborator)
-        {
-            var result = collaborator.UsefulFunctionA();
-            return $"The result of the B2 collaborating with the ({result})";
-        }
-    }
-
-    class Client
-    {
-        public void Main()
-        {
-            Console.WriteLine("Client: Testing client code with the first factory type...");
-            ClientMethod(new ConcreteFactory1());
-            Console.WriteLine();
-
-            Console.WriteLine("Client: Testing the same client code with the second factory type...");
-            ClientMethod(new ConcreteFactory2());
-        }
-
-        public void ClientMethod(IAbstractFactory factory)
-        {
-            var productA = factory.CreateProductA();
-            var productB = factory.CreateProductB();
-
-            Console.WriteLine(productB.UsefulFunctionB());
-            Console.WriteLine(productB.AnotherUsefulFunctionB(productA));
+            if ((subject as Subject).State == 0 || (subject as Subject).State >= 2)
+            {
+                Console.WriteLine("ConcreteObserverB: Reacted to the event.");
+            }
         }
     }
 
@@ -104,7 +102,20 @@ namespace MixAndMatchPatterns.AbstractFactory_With_Singleton
     {
         static void Main(string[] args)
         {
-            new Client().Main();
+            // The client code.
+            var subject = new Subject();
+            var observerA = new ConcreteObserverA();
+            subject.Attach(observerA);
+
+            var observerB = new ConcreteObserverB();
+            subject.Attach(observerB);
+
+            subject.SomeBusinessLogic();
+            subject.SomeBusinessLogic();
+
+            subject.Detach(observerB);
+
+            subject.SomeBusinessLogic();
         }
     }
 }
